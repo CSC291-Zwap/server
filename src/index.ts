@@ -1,11 +1,19 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import { PrismaClient } from './generated/prisma/index.js'
 
 const app = new Hono()
+export const db = new PrismaClient();
 
 app.get('/', (c) => {
-  return c.text('Hello Hono!')
+  return c.text('Welcome to Zwap backend!')
 })
+
+db.$connect().then(() => {
+  console.log("Connected to db.");
+}).catch((error) => {
+  console.log("Error connecting to the db: ", error);
+});
 
 serve({
   fetch: app.fetch,

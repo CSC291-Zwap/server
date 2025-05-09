@@ -15,6 +15,10 @@ node_modules/
 .env
 .env.production
 
+# Prisma
+prisma/dev.db
+src/generated/prisma/
+
 # logs
 logs/
 *.log
