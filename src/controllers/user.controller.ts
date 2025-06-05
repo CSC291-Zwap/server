@@ -1,5 +1,22 @@
 import type { Context } from "hono";
-import { updateUserName } from "../models/user.model.ts";
+import { getUserInfo, updateUserName } from "../models/user.model.ts";
+
+export const getProfile = async (c: Context) => {
+  try {
+    const userId = c.get("userId");
+
+    const user = await getUserInfo(userId);
+
+    if (!user) {
+      return c.json({ msg: "User not found." }, 404);
+    }
+
+    return c.json({ user }, 200);
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    return c.json({ msg: "Internal server error." }, 500);
+  }
+};
 
 export const updateName = async (c: Context) => {
   try {
