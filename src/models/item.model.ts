@@ -42,4 +42,23 @@ const createItem = async (input: Item) => {
   }
 };
 
-export { createItem };
+const getItemAll = async () => {
+    try {
+        const items = await db.item.findMany({
+            include: {
+                images: true,
+                user: true,
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        return items;
+    } catch (error) {
+        console.error("Failed to get all items:", error);
+        throw error;
+    }
+}
+
+export { createItem, getItemAll };

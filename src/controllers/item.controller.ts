@@ -38,3 +38,18 @@ export const createItem = async (c: Context) => {
     }, 500);
   }
 };
+
+export const getItemAll = async (c: Context) => {
+  try {
+    const items = await itemModel.getItemAll();
+    return c.json({
+      data: items,
+      msg: "Items fetched successfully!",
+    }, 200);
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    return c.json({
+      msg: "Internal server error.",
+    }, 500);
+  }
+};
