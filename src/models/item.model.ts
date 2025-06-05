@@ -61,4 +61,71 @@ const getItemAll = async () => {
     }
 }
 
-export { createItem, getItemAll };
+const deleteItembyId = async (id: string) => {
+  try {
+    await db.image.deleteMany({
+      where: {
+        itemId: id,
+      },
+    });
+
+    const deletedItem = await db.item.delete({
+      where: {
+        id,
+      },
+    });
+
+    return deletedItem;
+  } catch (error) {
+    console.error("Failed to delete item:", error);
+    throw error;
+  }
+};
+
+const updateItem = async (id: string, input: Partial<Item>) => {
+  try {
+    const updatedItem = await db.item.update({
+      where: { id },
+      data: {
+        prod_name: input.prodName,
+        description: input.prodDesc,
+        price: input.price,
+        pick_up: input.pickup,
+        city: input.city,
+        category: input.category,
+      },
+    });
+
+    if (input.imageUrl && input.imageUrl.length > 0) {
+      await db.image.deleteMany({
+        where: {
+          itemId: id,
+        },
+      });
+
+      await db.image.createMany({
+        data: input.imageUrl.map((url) => ({
+          url,
+          itemId: id,
+        })),
+      });
+    }
+
+    const result = await db.item.findUnique({
+      where: { id },
+      include: {
+        images: true,
+        user: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Failed to update item:", error);
+    throw error;
+  }
+};             
+
+export { createItem, getItemAll, updateItem, deleteItembyId };

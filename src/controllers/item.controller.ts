@@ -53,3 +53,43 @@ export const getItemAll = async (c: Context) => {
     }, 500);
   }
 };
+
+export const deleteItem = async (c: Context) => {
+  try {
+    const itemId = c.req.param("id");
+
+    if (!itemId) {
+      return c.json({ msg: "Item ID is required." }, 400);
+    }
+
+    const deleted = await itemModel.deleteItembyId(itemId);
+    return c.json({
+      data: deleted,
+      msg: "Item deleted successfully.",
+    }, 200);
+  } catch (error) {
+    console.error("Error deleting item:", error);
+    return c.json({ msg: "Internal server error." }, 500);
+  }
+};
+
+export const updateItem = async (c: Context) => {
+  try {
+    const id = c.req.param("id");
+    const body = await c.req.json<Partial<createItemBody>>();
+
+    if (!id) {
+      return c.json({ msg: "Item ID is required." }, 400);
+    }
+
+    const updated = await itemModel.updateItem(id, body);
+
+    return c.json({
+      data: updated,
+      msg: "Item updated successfully!",
+    }, 200);
+  } catch (error) {
+    console.error("Error updating item:", error);
+    return c.json({ msg: "Internal server error." }, 500);
+  }
+};
