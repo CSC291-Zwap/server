@@ -2,7 +2,7 @@ import type { MiddlewareHandler } from 'hono';
 import { verifyToken } from '../utils/jwt.utils.ts';
 
 interface CustomJwtPayload {
-  userId: number;
+  userId: string;
   iat?: number;
   exp?: number;
 }

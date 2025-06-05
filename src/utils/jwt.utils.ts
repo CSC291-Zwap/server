@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
 type UserPayload = {
-  id: number;
+  id: String;
 };
 
 const JWT_SECRET = process.env.jwt_secret_key;

@@ -27,11 +27,11 @@ enum Category {
 
 model Item {
   id          String   @id @default(uuid())
-  prod_name   String
-  description String?
-  price       Float
-  pick_up     String
-  city        String
+  prod_name   String?
+  description String
+  price       Float?
+  pick_up     String?
+  city        String?
   category    Category @default(fashion)
   userId      String
   user        User     @relation(fields: [userId], references: [id])

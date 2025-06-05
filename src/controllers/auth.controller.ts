@@ -43,10 +43,9 @@ const signup = async (c: Context) => {
         hashedPassword,
     );
 
-    const token = generateToken(newUser);
+    const token = generateToken({ id: newUser.id });
 
     return c.json({
-        success: true,
         data: {
           newUser,
           token,
@@ -106,7 +105,6 @@ const login = async (c: Context) => {
      const token = generateToken({ id: user.id });
 
     return c.json({
-      success: true,
       data: {
         id: user.id,
         email: user.email,
