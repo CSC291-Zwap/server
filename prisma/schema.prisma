@@ -9,13 +9,15 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String?
-  email     String   @unique
-  password  String
-  items     Item[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
+  id             String   @id @default(uuid())
+  name           String?
+  email          String   @unique
+  password       String
+  items          Item[]
+  buyerOrders    Order[]  @relation("BuyerRelation")
+  sellerOrders   Order[]  @relation("SellerRelation")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt @default(now())
 }
 
 enum Category {
@@ -36,6 +38,7 @@ model Item {
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   images      Image[]
+  orders      Order[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -47,4 +50,16 @@ model Image {
   item      Item     @relation(fields: [itemId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id         String   @id @default(uuid())
+  itemId     String
+  item       Item     @relation(fields: [itemId], references: [id])
+  buyerId    String
+  buyer      User     @relation("BuyerRelation", fields: [buyerId], references: [id])
+  sellerId   String
+  seller     User     @relation("SellerRelation", fields: [sellerId], references: [id])
+  status     String   @default("pending")
+  orderTime  DateTime @default(now())
 }

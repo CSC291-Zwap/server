@@ -93,3 +93,12 @@ export const updateItem = async (c: Context) => {
     return c.json({ msg: "Internal server error." }, 500);
   }
 };
+
+export const getCategoryList = async (c: Context) => {
+  try {
+    const categories = await itemModel.getCategory();
+    return c.json({ categories }, 200);
+  } catch (error) {
+    return c.json({ msg: "Failed to fetch categories." }, 500);
+  }
+};

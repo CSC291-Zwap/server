@@ -1,4 +1,4 @@
-import type { Category } from "../generated/prisma/index.js";
+import { Category } from "../generated/prisma/index.js";
 import { db } from "../index.ts"
 
 interface Item {
@@ -128,4 +128,13 @@ const updateItem = async (id: string, input: Partial<Item>) => {
   }
 };             
 
-export { createItem, getItemAll, updateItem, deleteItembyId };
+const getCategory = async () => {
+  try {
+    return Object.values(Category);
+  }catch (error) {
+    console.error("Failed to get categories:", error);
+    throw error;
+  }
+}
+
+export { createItem, getItemAll, updateItem, deleteItembyId, getCategory };
