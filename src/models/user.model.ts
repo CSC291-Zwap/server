@@ -12,7 +12,7 @@ const getUserInfo = async (userId: string) => {
         updatedAt: true,
         items: {
           include: {
-            images: true, 
+            images: true,
           },
         },
       },
