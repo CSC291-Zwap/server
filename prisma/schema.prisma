@@ -27,6 +27,12 @@ enum Category {
   others
 }
 
+enum ItemStatus {
+  available
+  sold
+  reserved
+}
+
 model Item {
   id          String   @id @default(uuid())
   prod_name   String?
@@ -35,6 +41,7 @@ model Item {
   pick_up     String?
   city        String?
   category    Category @default(fashion)
+  status      ItemStatus @default(available)
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   images      Image[]

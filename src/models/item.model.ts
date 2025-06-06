@@ -43,23 +43,24 @@ const createItem = async (input: Item) => {
 };
 
 const getItemAll = async () => {
-    try {
-        const items = await db.item.findMany({
-            include: {
-                images: true,
-                user: true,
-            },
-            orderBy: {
-                createdAt: 'desc',
-            },
-        });
+  try {
+    const items = await db.item.findMany({
+      where: { status: "available" },
+      include: {
+        images: true,
+        user: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-        return items;
-    } catch (error) {
-        console.error("Failed to get all items:", error);
-        throw error;
-    }
-}
+    return items;
+  } catch (error) {
+    console.error("Failed to get all items:", error);
+    throw error;
+  }
+};
 
 const deleteItembyId = async (id: string) => {
   try {
