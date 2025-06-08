@@ -2,6 +2,7 @@ import type { Context } from "hono";
 import { getUserInfo, updateUserName } from "../models/user.model.ts";
 
 export const getProfile = async (c: Context) => {
+  // console.log("Fetching user profile...");
   try {
     const userId = c.get("userId");
 

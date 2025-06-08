@@ -92,7 +92,6 @@ export const updateItem = async (c: Context) => {
     }
 
     const updated = await itemModel.updateItem(id, body);
-
     return c.json({
       data: updated,
       msg: "Item updated successfully!",

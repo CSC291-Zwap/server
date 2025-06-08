@@ -50,7 +50,9 @@ const getItemAll = async () => {
     try {
         const items = await db.item.findMany({
             include: {
-                images: true,
+                images: {
+                  select: { url: true },
+                },
                 user: {
                   select: { id: true, name: true, email: true },
                 },
@@ -59,7 +61,8 @@ const getItemAll = async () => {
                 createdAt: 'desc',
             },
         });
-        console.log("Fetched items:", items[1].images);
+        // console.log("Fetched items:", items[1].images);
+        // console.log("Fetched items:", items.length, "items found.");
         return items;
     } catch (error) {
         console.error("Failed to get all items:", error);
@@ -148,6 +151,7 @@ const deleteItembyId = async (id: string) => {
 const updateItem = async (id: string, input: Partial<Item>) => {
   try {
     // Get current item to potentially clean up old images
+    // console.log("Updating item with ID:", id, "and input:", input);
     const currentItem = await db.item.findUnique({
       where: { id },
       include: { images: true },
@@ -156,7 +160,7 @@ const updateItem = async (id: string, input: Partial<Item>) => {
     if (!currentItem) {
       throw new Error("Item not found");
     }
-
+    console.log("new item before update:", input);
     const updatedItem = await db.item.update({
       where: { id },
       data: {
@@ -168,6 +172,8 @@ const updateItem = async (id: string, input: Partial<Item>) => {
         category: input.category,
       },
     });
+
+    console.log("Updated item:", updatedItem);
 
     // Handle image updates if provided
     if (input.imageUrls && input.imageUrls.length > 0) {
@@ -187,6 +193,8 @@ const updateItem = async (id: string, input: Partial<Item>) => {
       });
     }
 
+    // console.log("Item updated successfully:", updatedItem);
+
     const result = await db.item.findUnique({
       where: { id },
       include: {
@@ -196,7 +204,6 @@ const updateItem = async (id: string, input: Partial<Item>) => {
         },
       },
     });
-
     return {
       ...result,
       oldImageUrls: currentItem.images.map(img => img.url), // For Firebase cleanup
