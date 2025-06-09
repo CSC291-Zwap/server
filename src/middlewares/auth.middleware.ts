@@ -10,7 +10,7 @@ interface CustomJwtPayload {
 const authenticate: MiddlewareHandler = async (c, next) => {
   const authHeader = c.req.header('Authorization');
   const token = authHeader?.split(' ')[1];
-
+  console.log('Authentication token:', token);
   if (!token) {
     return c.json({ message: 'Authentication required' }, 401);
   }

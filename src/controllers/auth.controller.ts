@@ -11,6 +11,7 @@ type createUserBody = {
 const signup = async (c: Context) => {
   try {
     const body = await c.req.json<createUserBody>();
+    console.log("Signup request received with body:", body);
 
     const hashedPassword = await hash(body.password, 10);
 
@@ -54,6 +55,7 @@ const signup = async (c: Context) => {
     });
 
   } catch (e) {
+    console.error(e);
     return c.json({
       success: false,
       data: null,

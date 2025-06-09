@@ -3,28 +3,37 @@ import * as itemModel from "../models/item.model.ts";
 import type { Category } from "../generated/prisma/index.js";
 
 type createItemBody = {
-  prodName: string;
-  prodDesc: string;
+  prod_name: string;
+  description: string;
   price: number;
-  pickup: string;
+  pick_up: string;
   city: string;
   category: Category;
-  imageUrl: string[];
+  userId: string; // Ensure userId is a string
+  imageUrls: string[];
 };
 
 export const createItem = async (c: Context) => {
   try {
     const body = await c.req.json<createItemBody>();
-
     const userId = c.get("userId");
 
-    if (!body.prodName || !body.price || !body.pickup || !body.city || !userId) {
+    if (!body.prod_name || !body.price || !body.pick_up || !body.city || !body.userId) {
       return c.json({
         msg: "Missing required fields.",
       }, 400);
     }
 
-    const newItem = await itemModel.createItem({...body, userId});
+    const newItem = await itemModel.createItem({
+      prodName: body.prod_name,
+      prodDesc: body.description,
+      price: body.price,
+      pickup: body.pick_up,
+      city: body.city,
+      category: body.category || "fashion", // Default to 'fashion' if not provided
+      userId: userId as string, // Ensure userId is a string 
+      imageUrls: body.imageUrls || [], // Use imageUrl array or default to empty array
+      });
 
     return c.json({
       data: newItem,
@@ -83,7 +92,6 @@ export const updateItem = async (c: Context) => {
     }
 
     const updated = await itemModel.updateItem(id, body);
-
     return c.json({
       data: updated,
       msg: "Item updated successfully!",

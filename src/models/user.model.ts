@@ -17,7 +17,7 @@ const getUserInfo = async (userId: string) => {
         },
       },
     });
-
+    // console.log("Fetched user info:", user);
     return user;
   } catch (error) {
     console.error("Failed to fetch user info:", error);
